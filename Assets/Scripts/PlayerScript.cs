@@ -111,4 +111,11 @@ public class PlayerScript : MonoBehaviour {
             }
         }
     }
+    void OnTriggerEnter(Collider coll)
+    {
+        if(coll.gameObject.name == "Test")
+        {
+            Destroy(coll.gameObject);
+        }
+    }
 }
