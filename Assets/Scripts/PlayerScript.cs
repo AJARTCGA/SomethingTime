@@ -28,12 +28,17 @@ public class PlayerScript : MonoBehaviour {
         {
             float x = Input.GetAxis("Player" + mControllerNum + "X");
             float z = Input.GetAxis("Player" + mControllerNum + "Y");
+            transform.Find("FrozenSign").GetComponent<SpriteRenderer>().enabled = false;
 
             if ((x > 0.1f || x < -0.1f) || (z > 0.1f || z < -0.1f))
             {
                 transform.rotation = Quaternion.Euler(0, Mathf.Atan2(-z, x) * 180 / Mathf.PI, 0);
                 transform.position = transform.position + new Vector3(x * speed, 0, z * speed);
             }
+        }
+        else
+        {
+            transform.Find("FrozenSign").GetComponent<SpriteRenderer>().enabled = true;
         }
     }
     
@@ -68,10 +73,12 @@ public class PlayerScript : MonoBehaviour {
     {
         mIsHour = true;
         GetComponent<MeshRenderer>().material.color = hourColor;
+        transform.Find("HourPower").GetComponent<SpriteRenderer>().enabled = true;
     }
     public void removeHour()
     {
         mIsHour = false;
+        transform.Find("HourPower").GetComponent<SpriteRenderer>().enabled = false;
         if (mIsMin)
         {
             GetComponent<MeshRenderer>().material.color = minuteColor;
