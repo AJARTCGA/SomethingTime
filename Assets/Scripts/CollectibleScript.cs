@@ -18,8 +18,15 @@ public class CollectibleScript : MonoBehaviour {
 	void Update () {
         if (bInBound)
         {
-            mVelocity = (mBoundTo.GetComponent<Transform>().position - this.GetComponent<Transform>().position).normalized * mSpdConst * Time.deltaTime;
-            this.GetComponent<Transform>().Translate(mVelocity);
+            if(mBoundTo != null)
+            {
+                mVelocity = (mBoundTo.GetComponent<Transform>().position - this.GetComponent<Transform>().position).normalized * mSpdConst * Time.deltaTime;
+                this.GetComponent<Transform>().Translate(mVelocity);
+            }
+            else
+            {
+                bInBound = false;
+            }
         }
 	}
 

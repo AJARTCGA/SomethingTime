@@ -4,29 +4,47 @@ using System.Collections.Generic;
 
 public class PlayerScript : MonoBehaviour
 {
+    public struct PlayerData
+    {
+        int playerNum;
+        int hatNum;
+        int accessoryNum;
+        int animNum;
+    }
+
 
     public int mControllerNum = 1;
     public float speed = 0.3f;
+    public GameObject mScoreBoard;
 
     bool mIsMin;
     bool mIsHour;
     bool mIsFrozen;
+    float mHealth;
     Color mStartColor;
+    ScoreHolder mScoreScript;
+    Animator mAnim;
+    MatchControllerScript matchScript;
+
     static Color frozenColor = Color.cyan;
     static Color hourColor = Color.white;
     static Color minuteColor = Color.black;
-    Animator mAnim;
 
     protected Dictionary<int, GameObject> mPtsDic = new Dictionary<int, GameObject>();
 
     // Use this for initialization
     void Start()
     {
+        matchScript = Camera.main.GetComponent<MatchControllerScript>();
         mAnim = GetComponent<Animator>();
         if (mAnim != null)
             mAnim.enabled = true;
         if (GetComponent<MeshRenderer>() != null)
             mStartColor = GetComponent<MeshRenderer>().material.color;
+
+        mHealth = 24;
+        mScoreScript = mScoreBoard.GetComponent<ScoreHolder>();
+        mScoreScript.setScore((int)mHealth);
     }
 
     // Update is called once per frame
@@ -57,24 +75,26 @@ public class PlayerScript : MonoBehaviour
         }
         else
         {
+            mHealth -= Time.deltaTime * 100;
+            mScoreScript.setScore((int)mHealth);
+            if(mHealth < 0)
+            {
+                matchScript.setDeath(mControllerNum);
+                Destroy(gameObject);
+            }
             transform.Find("FrozenSign").GetComponent<SpriteRenderer>().enabled = true;
         }
 
-        print("(a) Elements in mPtsDic: " + mPtsDic.Count);
         if (mPtsDic.Count > 0)
         {
-            print("(b) Elements in mPtsDic: " + mPtsDic.Count);
-            //List<int> keys = new List<int>(mPtsDic.Keys);
             int[] keys = (new List<int>(mPtsDic.Keys)).ToArray();
-            //print("Elements in keys: " + keys.Count);
             for (int i = 0; i < keys.Length; i++)
             {
                 int key = keys[i];
                 GameObject tmp = mPtsDic[key];
-                if (tmp != null && (transform.position - mPtsDic[key].transform.position).magnitude <= 1.5f)
+                if (tmp != null && (transform.position - mPtsDic[key].transform.position).magnitude <= 3.0f)
                 {
                     mPtsDic.Remove(key);
-                    print(mPtsDic.Count);
                     Destroy(tmp);
                     
                 }
@@ -96,6 +116,16 @@ public class PlayerScript : MonoBehaviour
             if (GetComponent<MeshRenderer>() != null)
                 GetComponent<MeshRenderer>().material.color = hourColor;
         }
+        GameObject minutePower = transform.Find("MinutePower").gameObject;
+        if (minutePower.GetComponent<SpriteRenderer>() != null)
+        {
+            transform.Find("minutePower").GetComponent<SpriteRenderer>().enabled = true;
+        }
+        else
+        {
+            minutePower.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+        }
+
     }
     public void removeMin()
     {
@@ -111,19 +141,45 @@ public class PlayerScript : MonoBehaviour
             if (GetComponent<MeshRenderer>() != null)
                 GetComponent<MeshRenderer>().material.color = mStartColor;
         }
+        GameObject minutePower = transform.Find("MinutePower").gameObject;
+        if (minutePower.GetComponent<SpriteRenderer>() != null)
+        {
+            transform.Find("minutePower").GetComponent<SpriteRenderer>().enabled = false;
+        }
+        else
+        {
+            minutePower.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
+        }
     }
 
     public void setHour()
     {
         mIsHour = true;
+        mIsFrozen = false;
         if (GetComponent<MeshRenderer>() != null)
             GetComponent<MeshRenderer>().material.color = hourColor;
-        transform.Find("HourPower").GetComponent<SpriteRenderer>().enabled = true;
+        GameObject hourPower = transform.Find("HourPower").gameObject;
+        if(hourPower.GetComponent<SpriteRenderer>() != null)
+        {
+            transform.Find("HourPower").GetComponent<SpriteRenderer>().enabled = true;
+        }
+        else
+        {
+            hourPower.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+        }
     }
     public void removeHour()
     {
         mIsHour = false;
-        transform.Find("HourPower").GetComponent<SpriteRenderer>().enabled = false;
+        GameObject hourPower = transform.Find("HourPower").gameObject;
+        if (hourPower.GetComponent<SpriteRenderer>() != null)
+        {
+            transform.Find("HourPower").GetComponent<SpriteRenderer>().enabled = false;
+        }
+        else
+        {
+            hourPower.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
+        }
         if (mIsMin)
         {
             if (GetComponent<MeshRenderer>() != null)
@@ -152,17 +208,13 @@ public class PlayerScript : MonoBehaviour
             PlayerScript script = coll.gameObject.GetComponent<PlayerScript>();
             if (script.getHour())
             {
-                mIsFrozen = true;
-                if (GetComponent<MeshRenderer>() != null)
-                    GetComponent<MeshRenderer>().material.color = frozenColor;
+                freeze();
             }
             else if (script.getMin())
             {
                 if (!mIsHour)
                 {
-                    mIsFrozen = false;
-                    if (GetComponent<MeshRenderer>() != null)
-                        GetComponent<MeshRenderer>().material.color = mStartColor;
+                    unfreeze();
                 }
             }
         }
@@ -177,5 +229,21 @@ public class PlayerScript : MonoBehaviour
                 mPtsDic[k] = coll.gameObject;
             }
         }
+    }
+
+    void freeze()
+    {
+        mIsFrozen = true;
+        if (GetComponent<MeshRenderer>() != null)
+            GetComponent<MeshRenderer>().material.color = frozenColor;
+        matchScript.setFrozen(mControllerNum);
+    }
+
+    void unfreeze()
+    {
+        mIsFrozen = false;
+        if (GetComponent<MeshRenderer>() != null)
+            GetComponent<MeshRenderer>().material.color = mStartColor;
+        matchScript.removeFrozen(mControllerNum);
     }
 }

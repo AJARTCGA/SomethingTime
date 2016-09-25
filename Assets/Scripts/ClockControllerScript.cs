@@ -14,6 +14,7 @@ public class ClockControllerScript : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
+        Object.DontDestroyOnLoad(GameObject.Find("PlayerDataContainer"));
         hourHand = GameObject.Find("HourHandOrigin");
         minuteHand = GameObject.Find("MinuteHandOrigin");
         sun = GameObject.Find("Sun");
@@ -46,26 +47,34 @@ public class ClockControllerScript : MonoBehaviour {
         //Debug.Log(currentMinQuadrant + " - " + min);
         if (currentMinQuadrant == 4 && min < 5)
         {
-            player1.setMin();
-            player4.removeMin();
+            if(player1 != null)
+                player1.setMin();
+            if (player4 != null)
+                player4.removeMin();
             currentMinQuadrant = 1;
         }
         else if (currentMinQuadrant == 1 && min > 90)
         {
-            player2.setMin();
-            player1.removeMin();
+            if (player2 != null)
+                player2.setMin();
+            if (player1 != null)
+                player1.removeMin();
             currentMinQuadrant = 2;
         }
         else if (currentMinQuadrant == 2 && min > 180)
         {
-            player3.setMin();
-            player2.removeMin();
+            if (player3 != null)
+                player3.setMin();
+            if (player2 != null)
+                player2.removeMin();
             currentMinQuadrant = 3;
         }
         else if (currentMinQuadrant == 3 && min > 270)
         {
-            player4.setMin();
-            player3.removeMin();
+            if (player4 != null)
+                player4.setMin();
+            if (player3 != null)
+                player3.removeMin();
             currentMinQuadrant = 4;
         }
     }
@@ -75,26 +84,34 @@ public class ClockControllerScript : MonoBehaviour {
 
         if (currentHourQuadrant == 4 && hour < 5)
         {
-            player1.setHour();
-            player4.removeHour();
+            if (player1 != null)
+                player1.setHour();
+            if (player4 != null)
+                player4.removeHour();
             currentHourQuadrant = 1;
         }
         else if (currentHourQuadrant == 1 && hour > 90)
         {
-            player2.setHour();
-            player1.removeHour();
+            if (player2 != null)
+                player2.setHour();
+            if (player1 != null)
+                player1.removeHour();
             currentHourQuadrant = 2;
         }
         else if (currentHourQuadrant == 2 && hour > 180)
         {
-            player3.setHour();
-            player2.removeHour();
+            if (player3 != null)
+                player3.setHour();
+            if (player2 != null)
+                player2.removeHour();
             currentHourQuadrant = 3;
         }
         else if (currentHourQuadrant == 3 && hour > 270)
         {
-            player4.setHour();
-            player3.removeHour();
+            if (player4 != null)
+                player4.setHour();
+            if (player3 != null)
+                player3.removeHour();
             currentHourQuadrant = 4;
         }
     }

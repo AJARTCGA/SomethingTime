@@ -11,7 +11,7 @@ public class SevenSeg : MonoBehaviour {
     
 	void Start ()
     {
-        this.mScore = transform.parent.GetComponent<ScoreHolder>().mScore;
+        mScore = transform.parent.GetComponent<ScoreHolder>().mScore;
         for(int i = 0; i < transform.childCount; i++)
         {
             Transform child = transform.GetChild(i);
@@ -29,7 +29,7 @@ public class SevenSeg : MonoBehaviour {
             if(displayScore[temp] == 0 )
             {
                 child.GetComponent<SpriteRenderer>().enabled = false;
-                //child.GetComponent<SpriteRenderer>().color = Color.grey;
+
             }
             else if(displayScore[temp] == 1)
             {
@@ -41,6 +41,7 @@ public class SevenSeg : MonoBehaviour {
 
     public void ripScore()
     {
+        mScore = transform.parent.GetComponent<ScoreHolder>().mScore;
         string tempScore = mScore.ToString();
         char tempDigit;
         if (tempScore.Length - digitPos - 1 >= 0)
@@ -86,8 +87,19 @@ public class SevenSeg : MonoBehaviour {
                 displayScore = new byte[] { 1, 1, 1, 1, 1, 1, 0 };
                 break;
         }
+        temp = 0;
+        foreach (Transform child in transform)
+        {
+            if (displayScore[temp] == 0)
+            {
+                child.GetComponent<SpriteRenderer>().enabled = false;
 
+            }
+            else if (displayScore[temp] == 1)
+            {
+                child.GetComponent<SpriteRenderer>().enabled = true;
+            }
+            temp++;
+        }
     }
-
-
 }

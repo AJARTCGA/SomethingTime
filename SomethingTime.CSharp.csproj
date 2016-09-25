@@ -62,14 +62,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\CannonScript.cs" />
+    <Compile Include="Assets\Scripts\CharacterSelection.cs" />
     <Compile Include="Assets\Scripts\ClockControllerScript.cs" />
     <Compile Include="Assets\Scripts\CollectibleScript.cs" />
+    <Compile Include="Assets\Scripts\DoorTriggerScript.cs" />
+    <Compile Include="Assets\Scripts\MatchControllerScript.cs" />
     <Compile Include="Assets\Scripts\MenuScript.cs" />
+    <Compile Include="Assets\Scripts\PlayerDataContainerScript.cs" />
     <Compile Include="Assets\Scripts\PlayerScript.cs" />
     <Compile Include="Assets\Scripts\RotateClock.cs" />
     <Compile Include="Assets\Scripts\ScoreHolder.cs" />
     <Compile Include="Assets\Scripts\SevenSeg.cs" />
     <Compile Include="Assets\Scripts\TestCylinderScript.cs" />
+    <Compile Include="Assets\Scripts\WinSceneControllerScript.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
