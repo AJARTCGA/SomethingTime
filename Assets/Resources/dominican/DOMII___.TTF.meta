@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 782df4b44e570904a9d3e82707905929
+timeCreated: 1474755173
+licenseType: Pro
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Dominican Italic
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 0795c9886b95114469b96eec24c4ba14, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
